@@ -4,17 +4,17 @@ import json
 # Specifie les parametres de la requête 
 # une première requète générale puis une par facteur de développement
 # partie à optimiser pour la suite
-query0 = 'Digital identity system and developing countries'
-query1 = 'Digital identity system and financial inclusion'
-query2 = 'Digital identity system and Property rights'
-query3 = 'Digital identity system and health'
-query4 = 'Digital identity system and vaccination'
-query5 = 'Digital identity system and education'
-query6 = 'Digital identity system and age'
-query7 = 'Digital identity system and corruption'
-query8 = 'Digital identity system and salary declaration'
-query9 = 'Digital identity system and taxes'
-query10 = 'Digital identity system and work access'
+query0 = 'identification system and developing countries'
+query1 = 'birth registration and developing countries and health care'
+query2 = 'birth registration and rights'
+query3 = 'identification system and health care'
+query4 = 'birth registration and vaccination'
+query5 = 'birth registration and education'
+query6 = 'identification system and corruption'
+query7 = 'birth registration and corruption'
+query8 = 'birth registration and salary declaration'
+query9 = 'identification system and taxes'
+query10 = 'birth registration and work access'
 # Nombre de réponses souhaitées par requête
 nombreReponse = 10
 affiche = 1
@@ -37,19 +37,19 @@ for query in [query0, query1, query2, query3, query4, query5, query6, query7, qu
 
     # Envoie la requête et récupère les résultats
     reponse = requests.get(url, params=query_params).json()
-
+    listeReponse = []
 
     # Si aucun document n'est trouvé, affiche un message
     if reponse['total'] == 0:
         print("Aucun document trouvé, essayez une requête moins spécifique","\n")
     
     else:
-        # écrit les résultats dans un fichier JSON
+        # écrit les résultats dans une liste
         with open(f"articles.json", "a") as file:
             if nombreReponse<reponse['total']:
                 print("Nous avons trouvé ",reponse['total'], "résultats","\n")
                 for i in range (nombreReponse) :
-                    json.dump(reponse["data"][i], file, indent=4)            
+                    listeReponse.append(reponse["data"][i])           
                 for i in range (affiche) :
                     print(reponse["data"][i], "\n")
                     print(f"les {nombreReponse} articles ont bien été enregistrés dans le fichier articles.json","\n")
@@ -58,9 +58,13 @@ for query in [query0, query1, query2, query3, query4, query5, query6, query7, qu
             else:
                 print("Nous avons trouvé ",reponse['total'], "résultats","\n")
                 for i in range (reponse['total']) :
-                    json.dump(reponse["data"][i], file, indent=4)            
+                    listeReponse.append(reponse["data"][i])            
                 if reponse['total']>0:
                     for i in range (affiche) :
                         print(reponse["data"][i], "\n")
                         print(f"les {reponse['total']} articles ont bien été enregistrés dans le fichier articles.json","\n")
                         print("-------------------------------------------","\n")
+
+# écrit la listeResultat dans un fichier json
+with open('articles.json', 'w') as file:
+    json.dump(listeReponse, file)
