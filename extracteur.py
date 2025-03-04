@@ -2,7 +2,7 @@ from groq import Groq
 import json
 
 client = Groq(
-    api_key="clegroq",
+    api_key="...",
 )
 
 def chat_with_groq(l_prompt):
@@ -14,9 +14,10 @@ def chat_with_groq(l_prompt):
             messages=[
                 {
                     "role": "user",
-                    "content": texte,
+                    "content": "Sans sauter de ligne et sans utiliser de retour à la ligne, répond à cette requête:"+texte,
                 }
             ],
+            temperature=0.2,
             model="llama3-8b-8192",
             )
             response[texte].append(r.choices[0].message.content)
@@ -35,7 +36,7 @@ with open('/Users/lorenzojaccaudgodefroy/Desktop/Excel/data/articles.json', 'r')
 csv_file = 'resultats_export.csv'
 
 # On ouvre le fichier CSV dans le but d'écrire les données des articles
-with open(csv_file, mode='w', encoding='utf-8') as file:
+with open("/Users/lorenzojaccaudgodefroy/Desktop/Excel/"+csv_file, mode='w', encoding='utf-8') as file:
     # On commence par écrire l'entête
     file.write('URL;PublicationTypes;publicationDate;Title;Facteurs_dev;Facteurs_precisions;Pays;Date_source;Année_source;Méthode;Abstract\n')
     file_content = ""
@@ -56,27 +57,13 @@ with open(csv_file, mode='w', encoding='utf-8') as file:
             publicationDate = item.get('publicationDate', '')
             authors = item.get('authors','')
 
-            # Prompt Chat GPT
+            # Prompt Groq
             factor_dev = "En français, renvoie une liste de facteur de développement étudié dans l'étude ayant pour url "+url+". Renvoie uniquement ceci."
             factor_precisions = "En français, décrit ici les effets étudiés dans l'étude ayant pour url "+url+". Renvoie uniquement ceci."
             country = "En français, indique ici les différents pays dans lequel ou lesquels l'étude ayant pour url "+url+" porte. Renvoie uniquement ceci."
             data_s = "En français, indique ici les différentes sources de la ou lesquelle(s) l'étude ayant pour url "+url+" porte. Renvoie uniquement ceci."
             year_s = "En français, indique ici l'année des données utilisées des sources de la ou lesquelle(s) l'étude ayant pour url "+url+" porte. Renvoie uniquement ceci."
             methode = "En français, indique ici la méthodologie utilisé pour les différents facteurs de l'étude ayant pour url "+url+". Renvoie uniquement ceci."
-
-            # L'interrogatoire ...
-            #factor_dev = chat_with_gpt(factor_dev)
-            #factor_precisions = chat_with_gpt(factor_precisions)
-            #country = chat_with_gpt(country)
-            #data_s = chat_with_gpt(data_s)
-            #year_s = chat_with_gpt(year_s)
-            #methode = chat_with_gpt(methode)
-
-            # On stock les données dans une variable
-
-            #if not(factor_dev) or not(factor_precisions) or not(country) or not(data_s) or not(year_s) or not(methode):
-                #print("Problème avec l'un des prompts.")
-            #else :
 
             t_rep=[factor_dev,factor_precisions,country,data_s,year_s,methode]
             requ = chat_with_groq(t_rep)
