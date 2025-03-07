@@ -1,5 +1,4 @@
 from extracteur import *
-from bot_api_pubmed import *
 from recherche import *
 
 # Specifie les parametres de la requête 
@@ -22,4 +21,9 @@ affiche = 1
 
 research(query0,query1,query2,query3, query4, query5, query6, query7, query8, query9, query10,nombreReponse,affiche)
 
-extract('/Users/lorenzojaccaudgodefroy/Desktop/Excel/FINAL/articles.json','resultats_export.csv',"/Users/lorenzojaccaudgodefroy/Desktop/Excel/")
+#spécifie les chemins d'accès
+chemin_file= 'articles.json'
+csv_file = 'resultats_export.csv'
+chemin_acces = ""
+
+extract(chemin_file,csv_file,chemin_acces)
