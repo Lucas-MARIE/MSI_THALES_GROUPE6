@@ -1,30 +1,11 @@
 import requests
 import json
 
-# Specifie les parametres de la requête 
-# une première requète générale puis une par facteur de développement
-# partie à optimiser pour la suite
-query0 = 'identification system and developing countries'
-query1 = 'birth registration and developing countries and health care'
-query2 = 'birth registration and rights'
-query3 = 'identification system and health care'
-query4 = 'birth registration and vaccination'
-query5 = 'birth registration and education'
-query6 = 'identification system and corruption'
-query7 = 'birth registration and corruption'
-query8 = 'birth registration and salary declaration'
-query9 = 'identification system and taxes'
-query10 = 'birth registration and work access'
-# Nombre de réponses souhaitées par requête
-nombreReponse = 10
-affiche = 1
-
-
-# défini l'URL de l'API
-#/paper/search trie les documents par "relevance" par rapport aux mots clés de la requête
-url = "https://api.semanticscholar.org/graph/v1/paper/search"
-
 def research(query0,query1,query2,query3, query4, query5, query6, query7, query8, query9, query10,nombreReponse,affiche):
+    
+    # défini l'URL de l'API
+    #/paper/search trie les documents par "relevance" par rapport aux mots clés de la requête
+    url = "https://api.semanticscholar.org/graph/v1/paper/search"
 
     # Défini les paramètres de la requête pour chaque boucle
     for query in [query0, query1, query2, query3, query4, query5, query6, query7, query8, query9, query10]:
@@ -66,6 +47,12 @@ def research(query0,query1,query2,query3, query4, query5, query6, query7, query8
                             print(f"les {reponse['total']} articles ont bien été enregistrés dans le fichier articles.json","\n")
                             print("-------------------------------------------","\n")
 
-    # écrit la listeResultat dans un fichier json
-    with open('articles.json', 'w') as file:
-        json.dump(listeReponse, file)
+        # écrit la listeResultat dans un fichier json sans ecraser le contenue précédent, utile en cas d'erreurs   
+        with open('articles.json', 'r') as file:
+            try:
+                data = json.load(file)
+            except json.JSONDecodeError:
+                data = []
+            data.append(listeReponse)
+        with open('articles.json', 'w') as file:
+            json.dump(data, file)
