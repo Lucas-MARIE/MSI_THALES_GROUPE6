@@ -1,8 +1,13 @@
 from groq import Groq
 import json
+import os
+from dotenv import load_dotenv
+
+# Charger les variables d'environnement à partir du fichier .env
+load_dotenv()
 
 client = Groq(
-    api_key="...",
+    api_key=os.getenv("API_KEY"),
 )
 
 def chat_with_groq(l_prompt):
