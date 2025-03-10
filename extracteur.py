@@ -61,13 +61,15 @@ def extract(chemin_file,csv_file,chemin_acces):
                 publicationDate = item.get('publicationDate', '')
                 authors = item.get('authors','')
 
+                consigne = "Renvoie uniquement ceci."
+
                 # Prompt Groq
-                factor_dev = "En français, renvoie une liste de facteur de développement étudié dans l'étude ayant pour url "+url+". Renvoie uniquement ceci."
-                factor_precisions = "En français, décrit ici les effets étudiés dans l'étude ayant pour url "+url+". Renvoie uniquement ceci."
-                country = "En français, indique ici les différents pays dans lequel ou lesquels l'étude ayant pour url "+url+" porte. Renvoie uniquement ceci."
-                data_s = "En français, indique ici les différentes sources de la ou lesquelle(s) l'étude ayant pour url "+url+" porte. Renvoie uniquement ceci."
-                year_s = "En français, indique ici l'année des données utilisées des sources de la ou lesquelle(s) l'étude ayant pour url "+url+" porte. Renvoie uniquement ceci."
-                methode = "En français, indique ici la méthodologie utilisé pour les différents facteurs de l'étude ayant pour url "+url+". Renvoie uniquement ceci."
+                factor_dev = "En français, renvoie une liste de facteur de développement étudié dans l'étude ayant pour url "+url+"."+consigne
+                factor_precisions = "En français, décrit ici les effets étudiés dans l'étude ayant pour url "+url+"."+consigne
+                country = "En français, indique ici les différents pays dans lequel ou lesquels l'étude ayant pour url "+url+" porte."+consigne
+                data_s = "En français, indique ici les différentes sources de la ou lesquelle(s) l'étude ayant pour url "+url+" porte."+consigne
+                year_s = "En français, indique ici l'année des données utilisées des sources de la ou lesquelle(s) l'étude ayant pour url "+url+" porte."+consigne
+                methode = "En français, indique ici la méthodologie utilisé pour les différents facteurs de l'étude ayant pour url "+url+"."+consigne
 
                 t_rep=[factor_dev,factor_precisions,country,data_s,year_s,methode]
                 requ = chat_with_groq(t_rep)
