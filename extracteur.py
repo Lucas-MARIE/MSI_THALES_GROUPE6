@@ -16,14 +16,14 @@ def chat_with_groq(prompt):
         messages=[
             {
                 "role": "user",
-                "content": "Sans sauter de ligne et sans utiliser de retour à la ligne, répond à cette requête:"+texte,
+                "content": "Sans sauter de ligne et sans utiliser de retour à la ligne, répond à cette requête:"+prompt,
             }
         ],
         temperature=0.2,
         model="llama3-70b-8192",
         )
         # Extraire et retourner la réponse du modèle
-        return r
+        return r.choices[0].message.content
 
     except Exception as e:
         print(f"Une erreur s'est produite : {e}")
@@ -52,19 +52,19 @@ def extract(chemin_file,csv_file,chemin_acces):
                 url = item.get('url', '')
                 title = item.get('title', '')
                 publicationTypes = item.get('publicationTypes', '')
-                abstract = item.get('abstract', '')
+                abstract = str(item.get('abstract', ''))
                 publicationDate = item.get('publicationDate', '')
                 
                 #authors = item.get('authors','')
                 #citationCount = item.get('citationCount', '')
 
                 # Prompt Groq
-                factor_dev = "En français, renvoie une liste de facteur de développement étudié dans l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci."
-                factor_precisions = "En français, décrit ici les effets étudiés dans l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci."
-                country = "En français, indique ici les différents pays dans lequel ou lesquels l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci."
-                data_s = "En français, indique ici les différentes sources de la ou lesquelle(s) l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci."
-                year_s = "En français, indique ici l'année des données utilisées des sources de la ou lesquelle(s) l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci."
-                methode = "En français, indique ici la méthodologie utilisé pour les différents facteurs de l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci. Ne dépasse pas le nombre de caractère maximum dans ta réponse : 10000."
+                factor_dev = "En français, renvoie une liste de facteur de développement étudié dans l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci. Exemple de réponse : Accès à l'éducation et à la diplomation."
+                factor_precisions = "En français, décrit ici les effets étudiés dans l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci. Exemple de réponse : Effet de l'absence de certificat de naissance sur la progression scolaire et la diplomation primaire. "
+                country = "En français, indique ici les différents pays dans lequel ou lesquels l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci. Exemple de réponse : République Dominicaine"
+                data_s = "En français, indique ici les différentes sources de la ou lesquelle(s) l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci. Exemple de réponse : UNICEF, UNESCO, DHS"
+                year_s = "En français, indique ici l'année des données utilisées des sources de la ou lesquelle(s) l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci. Exemple de réponse : 2007 pour DHS"
+                methode = "En français, indique ici la méthodologie utilisé pour les différents facteurs de l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci. Ne saute aucune ligne et ne dépasse pas le nombre de caractère maximum dans ta réponse : 10000. Exemple de réponse (en anglais, mais tu dois répondre en Français): GPS data: geographic location of civil registry offices for spatial analysis. Data limitation: no birth registration data for individuals >18. analysis excludes post-high-school education. Measure of distance to civil registry office, mother’s legal documentation status. Restriction to urban areas to reduce correlation with unobservable factors. Econometric validity tests performed to ensure reliability. Subgroup Analysis: Subgroups: gender, mother’s education, household income. Robustness Checks: Sensitivity analyses, alternative model specifications to test robustness."
 
                 factor_dev = chat_with_groq(factor_dev)
                 factor_precisions = chat_with_groq(factor_precisions)
