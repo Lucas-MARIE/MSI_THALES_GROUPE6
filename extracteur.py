@@ -91,7 +91,7 @@ def extract(chemin_file,csv_file,chemin_acces):
 
                 file.write(file_content)
                 print(f"Les données ont été exportées avec succès dans '{csv_file}'.")
-            else:
-                print("Le fichier JSON ne contient pas une liste.")
+        else:
+            print("Le fichier JSON ne contient pas une liste.")
 
             
