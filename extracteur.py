@@ -10,24 +10,20 @@ client = Groq(
     api_key=os.getenv("API_KEY"),
 )
 
-def chat_with_groq(l_prompt):
-    response = {}
+def chat_with_groq(prompt):
     try:
-        for texte in l_prompt :
-            response[texte]=[]
-            r = client.chat.completions.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": "Sans sauter de ligne et sans utiliser de retour à la ligne, répond à cette requête:"+texte,
-                }
-            ],
-            temperature=0.2,
-            model="llama3-70b-8192",
-            )
-            response[texte].append(r.choices[0].message.content)
+        r = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": "Sans sauter de ligne et sans utiliser de retour à la ligne, répond à cette requête:"+texte,
+            }
+        ],
+        temperature=0.2,
+        model="llama3-70b-8192",
+        )
         # Extraire et retourner la réponse du modèle
-        return response
+        return r
 
     except Exception as e:
         print(f"Une erreur s'est produite : {e}")
@@ -55,11 +51,12 @@ def extract(chemin_file,csv_file,chemin_acces):
                 # On extrait les données qui nous interessent
                 url = item.get('url', '')
                 title = item.get('title', '')
-                abstract = item.get('abstract', '')
-                citationCount = item.get('citationCount', '')
                 publicationTypes = item.get('publicationTypes', '')
                 publicationDate = item.get('publicationDate', '')
-                authors = item.get('authors','')
+                
+                #authors = item.get('authors','')
+                #abstract = item.get('abstract', '')
+                #citationCount = item.get('citationCount', '')
 
                 # Prompt Groq
                 factor_dev = "En français, renvoie une liste de facteur de développement étudié dans l'étude ayant pour url "+url+". Renvoie uniquement ceci."
@@ -69,29 +66,17 @@ def extract(chemin_file,csv_file,chemin_acces):
                 year_s = "En français, indique ici l'année des données utilisées des sources de la ou lesquelle(s) l'étude ayant pour url "+url+" porte. Renvoie uniquement ceci."
                 methode = "En français, indique ici la méthodologie utilisé pour les différents facteurs de l'étude ayant pour url "+url+". Renvoie uniquement ceci. Ne dépasse pas le nombre de caractère maximum dans ta réponse : 10000."
 
-                t_rep=[factor_dev,factor_precisions,country,data_s,year_s,methode]
-                requ = chat_with_groq(t_rep)
+                factor_dev = chat_with_groq(factor_dev)
+                factor_precisions = chat_with_groq(factor_precisions)
+                country = chat_with_groq(country)
+                data_s = chat_with_groq(data_s)
+                year_s = chat_with_groq(year_s)
+                methode = chat_with_groq(methode)
 
-                i=0
-                first=True
-                for el in requ:
-                    for rows in requ[el]:
-                        if first :
-                            t_rep[i]=rows
-                            first=False
-                        else :
-                            t_rep[i]+=rows
-                    i+=1
-                    first=True
-
-
-
-                file_content = f'{title};{url};{publicationDate};{t_rep[0]};{t_rep[1]};{t_rep[2]};{publicationTypes};{t_rep[3]};{t_rep[4]};{t_rep[5]}\n'
+                file_content = f'{title};{url};{publicationDate};{factor_dev};{factor_precisions};{country};{publicationTypes};{data_s};{year_s};{methode}\n'
                 count+=1
 
                 file.write(file_content)
                 print(f"Les données ont été exportées avec succès dans '{csv_file}'.")
         else:
             print("Le fichier JSON ne contient pas une liste.")
-
-            
