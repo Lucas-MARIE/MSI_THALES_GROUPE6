@@ -42,7 +42,7 @@ def extract(chemin_file,csv_file,chemin_acces):
     # On ouvre le fichier CSV dans le but d'écrire les données des articles
     with open(chemin_acces+csv_file, mode='w', encoding='utf-8') as file:
         # On commence par écrire l'entête
-        file.write('URL;PublicationTypes;publicationDate;Title;Facteurs_dev;Facteurs_precisions;Pays;Date_source;Année_source;Méthode;Abstract\n')
+        file.write('Titre;URL;publicationDate;Facteurs_dev;Facteurs_precisions;Pays;PublicationTypes;Date_source;Année_source;Méthode\n')
         file_content = ""
 
         # On vérifie que le JSON est bien sous forme de liste
@@ -86,7 +86,7 @@ def extract(chemin_file,csv_file,chemin_acces):
 
 
 
-                file_content = f'{url};{publicationTypes};{publicationDate};{title};{t_rep[0]};{t_rep[1]};{t_rep[2]};{t_rep[3]};{t_rep[4]};{t_rep[5]};{abstract}\n'
+                file_content = f'{title};{url};{publicationDate};{t_rep[0]};{t_rep[1]};{t_rep[2]};{publicationTypes};{t_rep[3]};{t_rep[4]};{t_rep[5]}\n'
                 count+=1
 
                 file.write(file_content)
