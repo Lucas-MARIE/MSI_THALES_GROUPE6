@@ -1,7 +1,7 @@
+from dotenv import load_dotenv
 from groq import Groq
 import json
 import os
-from dotenv import load_dotenv
 
 # Charger les variables d'environnement à partir du fichier .env
 load_dotenv()
@@ -52,19 +52,19 @@ def extract(chemin_file,csv_file,chemin_acces):
                 url = item.get('url', '')
                 title = item.get('title', '')
                 publicationTypes = item.get('publicationTypes', '')
+                abstract = item.get('abstract', '')
                 publicationDate = item.get('publicationDate', '')
                 
                 #authors = item.get('authors','')
-                #abstract = item.get('abstract', '')
                 #citationCount = item.get('citationCount', '')
 
                 # Prompt Groq
-                factor_dev = "En français, renvoie une liste de facteur de développement étudié dans l'étude ayant pour url "+url+". Renvoie uniquement ceci."
-                factor_precisions = "En français, décrit ici les effets étudiés dans l'étude ayant pour url "+url+". Renvoie uniquement ceci."
-                country = "En français, indique ici les différents pays dans lequel ou lesquels l'étude ayant pour url "+url+" porte. Renvoie uniquement ceci."
-                data_s = "En français, indique ici les différentes sources de la ou lesquelle(s) l'étude ayant pour url "+url+" porte. Renvoie uniquement ceci."
-                year_s = "En français, indique ici l'année des données utilisées des sources de la ou lesquelle(s) l'étude ayant pour url "+url+" porte. Renvoie uniquement ceci."
-                methode = "En français, indique ici la méthodologie utilisé pour les différents facteurs de l'étude ayant pour url "+url+". Renvoie uniquement ceci. Ne dépasse pas le nombre de caractère maximum dans ta réponse : 10000."
+                factor_dev = "En français, renvoie une liste de facteur de développement étudié dans l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci."
+                factor_precisions = "En français, décrit ici les effets étudiés dans l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci."
+                country = "En français, indique ici les différents pays dans lequel ou lesquels l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci."
+                data_s = "En français, indique ici les différentes sources de la ou lesquelle(s) l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci."
+                year_s = "En français, indique ici l'année des données utilisées des sources de la ou lesquelle(s) l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci."
+                methode = "En français, indique ici la méthodologie utilisé pour les différents facteurs de l'étude ayant pour titre  "+title+" et pour abstract" + abstract +". Renvoie uniquement ceci. Ne dépasse pas le nombre de caractère maximum dans ta réponse : 10000."
 
                 factor_dev = chat_with_groq(factor_dev)
                 factor_precisions = chat_with_groq(factor_precisions)
